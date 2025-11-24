@@ -1,243 +1,337 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance System</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Attendance System</title>
+  <style>
+    :root{--bg:#f3f6fb;--card:#ffffff;--accent:#2563eb;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:#0f172a}
+    .center{max-width:980px;margin:36px auto;padding:20px}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-        }
+    /* Login card */
+    .card{background:var(--card);padding:22px;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,0.06)}
+    .login-grid{display:grid;gap:12px}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    input[type='text'],input[type='password'],select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf3}
+    button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button.ghost{background:transparent;color:var(--accent);border:1px solid rgba(37,99,235,0.12)}
 
-        .login-container {
-            width: 350px;
-            background: #fff;
-            margin: 100px auto;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
+    /* layout */
+    .top{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .menu{display:flex;gap:8px;flex-wrap:wrap}
+    .menu button{padding:8px 12px}
 
-        h2 {
-            text-align: center;
-        }
+    /* table */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left}
+    th{background:#fbfdff;font-weight:600}
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #999;
-        }
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .hidden{display:none}
+    .cols{display:grid;grid-template-columns:1fr 360px;gap:14px}
+    pre{background:#0b1220;color:#d1fae5;padding:12px;border-radius:8px;overflow:auto}
+    details{margin-top:12px}
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            border: none;
-            color: white;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .code-section {
-            width: 90%;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
-
-        details {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 6px;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-        }
-
-        summary {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        pre {
-            background: #222;
-            color: #0f0;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-    </style>
-
-    <script>
-        function login() {
-            let user = document.getElementById("username").value;
-            let pass = document.getElementById("password").value;
-
-            if (user === "admin" && pass === "1234") {
-                document.getElementById("login-page").classList.add("hidden");
-                document.getElementById("code-page").classList.remove("hidden");
-            } else {
-                alert("Incorrect username or password!");
-            }
-        }
-    </script>
+    /* responsive */
+    @media (max-width:880px){.cols{grid-template-columns:1fr} .center{margin:16px}} 
+  </style>
 </head>
-
 <body>
-
-    <!-- LOGIN PAGE -->
-    <div id="login-page" class="login-container">
-        <h2>Login</h2>
-
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-
-        <button onclick="login()">Login</button>
-    </div>
-
-
-    <!-- CODE PAGE -->
-    <div id="code-page" class="code-page hidden">
-        <div class="code-section">
-            <h2>Attendance System (Python Code)</h2>
-
-            <details>
-                <summary>CONFIG</summary>
-                <pre>
-import csv
-import datetime
-import os
-
-FILE = "attendance.csv"
-USERNAME = "admin"
-PASSWORD = "1234"
-                </pre>
-            </details>
-
-            <details>
-                <summary>LOGIN SYSTEM</summary>
-                <pre>
-def login():
-    print("=========== LOGIN REQUIRED ===========")
-    for attempt in range(3):
-        user = input("Enter username: ").strip()
-        pwd = input("Enter password: ").strip()
-
-        if user == USERNAME and pwd == PASSWORD:
-            print("\nLogin successful!")
-            return True
-        else:
-            print("Incorrect username or password.\n")
-    return False
-                </pre>
-            </details>
-
-            <details>
-                <summary>FILE HANDLING</summary>
-                <pre>
-def create_file():
-    if not os.path.exists(FILE):
-        with open(FILE, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["Date", "Student Name", "Status"])
-                </pre>
-            </details>
-
-            <details>
-                <summary>MARK ATTENDANCE</summary>
-                <pre>
-def mark_attendance():
-    name = input("Enter student name: ").strip()
-    status = input("Present (P) or Absent (A): ").upper().strip()
-
-    today = datetime.date.today().strftime("%d-%m-%Y")
-
-    with open(FILE, "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([today, name, "Present" if status == "P" else "Absent"])
-                </pre>
-            </details>
-
-            <details>
-                <summary>VIEW RAW TABLE</summary>
-                <pre>
-def view_raw_table():
-    with open(FILE, "r") as f:
-        for row in csv.reader(f):
-            print(row)
-                </pre>
-            </details>
-
-            <details>
-                <summary>ATTENDANCE FREQUENCY</summary>
-                <pre>
-def calculate_frequency():
-    freq = {}
-    with open(FILE, "r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        for date, name, status in reader:
-            name_key = name.lower()
-            if name_key not in freq:
-                freq[name_key] = {"present": 0, "absent": 0}
-            freq[name_key]["present" if status == "Present" else "absent"] += 1
-    return freq
-                </pre>
-            </details>
-
-            <details>
-                <summary>REPORT GENERATION</summary>
-                <pre>
-def full_summary_report():
-    freq = calculate_frequency()
-    for name, data in freq.items():
-        total = data["present"] + data["absent"]
-        percent = (data["present"] / total * 100)
-        print(name, percent)
-                </pre>
-            </details>
-
-            <details>
-                <summary>MAIN MENU</summary>
-                <pre>
-def menu():
-    create_file()
-
-    if not login():
-        return
-
-    while True:
-        print("1. Mark Attendance")
-        print("2. View Raw Attendance Table")
-        print("3. Full Report")
-        print("4. Exit")
-
-        choice = input("Enter choice: ")
-
-        if choice == "1": mark_attendance()
-        elif choice == "2": view_raw_table()
-        elif choice == "3": full_summary_report()
-        elif choice == "4": break
-                </pre>
-            </details>
-
+  <div class="center">
+    <div id="loginView" class="card">
+      <h2 style="margin:0 0 8px">Attendance System — Login</h2>
+      <p class="muted" style="margin:0 0 16px">Use the teacher/admin credentials to continue.</p>
+      <div class="login-grid">
+        <div>
+          <label for="username">Username</label>
+          <input id="username" type="text" placeholder="admin" autocomplete="username" />
         </div>
+        <div>
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="1234" autocomplete="current-password" />
+        </div>
+        <div style="display:flex;gap:10px">
+          <button id="loginBtn">Login</button>
+          <button id="demoBtn" class="ghost">Demo Data</button>
+        </div>
+        <small class="muted">Credentials in original python: <code>admin / 1234</code></small>
+      </div>
     </div>
 
+    <div id="appView" class="hidden">
+      <div class="top">
+        <div>
+          <h2 style="margin:0">Attendance System</h2>
+          <div class="muted">Logged in as <strong id="currentUser"></strong></div>
+        </div>
+        <div class="menu">
+          <button data-action="mark">Mark Attendance</button>
+          <button data-action="raw">View Raw Table</button>
+          <button data-action="full">Full Summary Report</button>
+          <button data-action="student">Individual Report</button>
+          <button data-action="monthly">Monthly Report</button>
+          <button id="downloadCsv">Download CSV</button>
+          <label style="display:inline-block;padding:8px 10px;background:#fff;border-radius:8px;border:1px dashed #e6edf3;cursor:pointer">
+            Upload CSV <input id="uploadCsv" type="file" accept=".csv" style="display:none" />
+          </label>
+          <button id="logout" class="ghost">Logout</button>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="card">
+          <div id="mainArea">
+            <!-- dynamic area -->
+            <h3>Welcome</h3>
+            <p class="muted">Choose an action from the menu. All data is stored in browser memory — you can download it as a CSV to persist it.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Quick controls</h4>
+          <div style="margin-top:8px">
+            <label for="nameInput">Student name</label>
+            <input id="nameInput" type="text" placeholder="e.g. Rohan" />
+            <label for="statusSelect">Status</label>
+            <select id="statusSelect"><option value="P">Present (P)</option><option value="A">Absent (A)</option></select>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button id="quickMark">Mark Now</button>
+              <button id="clearData" class="ghost">Clear All Data</button>
+            </div>
+          </div>
+
+          <hr style="margin:14px 0" />
+          <h4>Python reference (unchanged features)</h4>
+          <details>
+            <summary>Show updated Python snippet</summary>
+            <pre id="pycode"># The python script is unchanged in its features — it creates/uses attendance.csv, supports login (admin/1234), marking, viewing and reports.
+# For a direct runnable python file see the repository. This page is a client-side UI that mirrors the same features.</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Data model (in-memory) ----------
+    const CREDENTIALS = { user: 'admin', pass: '1234' };
+    let attendance = []; // {date:'dd-mm-yyyy', name:'Name', status:'Present'|'Absent'}
+
+    // helpers
+    function formatDate(d = new Date()){
+      const dd = String(d.getDate()).padStart(2,'0');
+      const mm = String(d.getMonth()+1).padStart(2,'0');
+      const yy = d.getFullYear();
+      return dd + '-' + mm + '-' + yy;
+    }
+
+    function show(viewHtml){ document.getElementById('mainArea').innerHTML = viewHtml; }
+
+    // ---------- Login ----------
+    const loginBtn = document.getElementById('loginBtn');
+    const demoBtn = document.getElementById('demoBtn');
+    loginBtn.addEventListener('click', ()=>{
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      if(u === CREDENTIALS.user && p === CREDENTIALS.pass){
+        enterApp(u);
+      } else {
+        alert('Incorrect username or password');
+      }
+    });
+
+    demoBtn.addEventListener('click', ()=>{
+      // prefill demo data and login as admin
+      seedDemo(); enterApp(CREDENTIALS.user);
+    });
+
+    function enterApp(username){
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('appView').classList.remove('hidden');
+      document.getElementById('currentUser').textContent = username;
+      renderWelcome();
+    }
+
+    document.getElementById('logout').addEventListener('click', ()=>{
+      if(confirm('Logout?')){ location.reload(); }
+    });
+
+    // ---------- Menu actions ----------
+    document.querySelectorAll('[data-action]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const a = e.currentTarget.getAttribute('data-action');
+        if(a==='mark') renderMark();
+        if(a==='raw') renderRaw();
+        if(a==='full') renderFullReport();
+        if(a==='student') renderStudentReport();
+        if(a==='monthly') renderMonthlyReport();
+      });
+    });
+
+    // ---------- Quick mark ----------
+    document.getElementById('quickMark').addEventListener('click', ()=>{
+      const name = document.getElementById('nameInput').value.trim();
+      const status = document.getElementById('statusSelect').value;
+      if(!name){ alert('Enter student name'); return; }
+      addAttendance(name, status === 'P' ? 'Present' : 'Absent');
+      alert('Marked');
+      renderRaw();
+    });
+
+    document.getElementById('clearData').addEventListener('click', ()=>{
+      if(confirm('Clear all attendance data?')){ attendance = []; renderWelcome(); }
+    });
+
+    // ---------- CSV download / upload ----------
+    document.getElementById('downloadCsv').addEventListener('click', ()=>{
+      downloadCSV();
+    });
+    document.getElementById('uploadCsv').addEventListener('change', (e)=>{
+      const f = e.target.files[0]; if(!f) return;
+      const reader = new FileReader();
+      reader.onload = (ev)=>{ parseCSV(ev.target.result); renderRaw(); }
+      reader.readAsText(f);
+    });
+
+    function downloadCSV(){
+      const header = ['Date','Student Name','Status'];
+      const rows = attendance.map(r=>[r.date,r.name,r.status]);
+      const csv = [header, ...rows].map(r=>r.map(cell=>('"'+String(cell).replace(/"/g,'""')+'"')).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'attendance.csv'; a.click(); URL.revokeObjectURL(url);
+    }
+
+    function parseCSV(text){
+      // basic CSV parser for the simple format created by this app
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length);
+      if(lines.length <= 1) return;
+      attendance = [];
+      for(let i=1;i<lines.length;i++){
+        const cols = splitCsvLine(lines[i]);
+        if(cols.length < 3) continue;
+        attendance.push({date: cols[0], name: cols[1], status: cols[2]});
+      }
+    }
+    function splitCsvLine(line){
+      // handles quoted csv cells (simple)
+      const cells = []; let cur = '', inQ = false;
+      for(let i=0;i<line.length;i++){
+        const ch = line[i];
+        if(ch === '"') { inQ = !inQ; continue; }
+        if(ch === ',' && !inQ){ cells.push(cur); cur=''; continue; }
+        cur += ch;
+      }
+      cells.push(cur);
+      return cells.map(s=>s.trim());
+    }
+
+    // ---------- Attendance functions (mirror python) ----------
+    function addAttendance(name, status){
+      attendance.push({date: formatDate(), name: name.trim(), status: status});
+    }
+
+    function calculateFrequency(){
+      const freq = {}; // name_lower -> {present,absent}
+      attendance.forEach(r=>{
+        const key = r.name.trim().toLowerCase();
+        if(!freq[key]) freq[key] = {present:0, absent:0};
+        if(r.status === 'Present') freq[key].present += 1; else freq[key].absent += 1;
+      });
+      return freq;
+    }
+
+    // ---------- Render views ----------
+    function renderWelcome(){
+      show(`<h3>Welcome</h3><p class='muted'>Use the menu to mark attendance, view reports or download the CSV. This client mirrors the features of your Python script but runs entirely in the browser (suitable for GitHub Pages).</p>`);
+    }
+
+    function renderMark(){
+      show(`<h3>Mark Attendance</h3>
+        <p class='muted'>Enter student name and status then click mark.</p>
+        <div style='display:flex;gap:8px;flex-wrap:wrap'>
+          <input id='m_name' placeholder='Student name' style='flex:1;padding:8px;border-radius:6px;border:1px solid #e6edf3' />
+          <select id='m_status' style='padding:8px;border-radius:6px;border:1px solid #e6edf3'><option value='P'>Present</option><option value='A'>Absent</option></select>
+          <button id='m_do'>Mark</button>
+        </div>
+      `);
+      document.getElementById('m_do').addEventListener('click', ()=>{
+        const n = document.getElementById('m_name').value.trim();
+        const s = document.getElementById('m_status').value === 'P' ? 'Present':'Absent';
+        if(!n){ alert('Enter a name'); return; }
+        addAttendance(n,s); alert('Attendance marked for '+n+' on '+formatDate()); renderRaw();
+      });
+    }
+
+    function renderRaw(){
+      if(attendance.length === 0){ show('<h3>Raw Attendance</h3><p class="muted">No attendance recorded yet.</p>'); return; }
+      let html = `<h3>Raw Attendance Table</h3><table><thead><tr><th>Date</th><th>Student Name</th><th>Status</th></tr></thead><tbody>`;
+      attendance.forEach(r=>{ html += `<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.status)}</td></tr>`; });
+      html += `</tbody></table>`;
+      show(html);
+    }
+
+    function renderFullReport(){
+      const freq = calculateFrequency();
+      const names = Object.keys(freq).sort();
+      if(names.length===0){ show('<h3>Full Summary Report</h3><p class="muted">No records available.</p>'); return; }
+      let html = `<h3>Full Summary Report</h3><table><thead><tr><th>Name</th><th>Present</th><th>Absent</th><th>Percentage</th></tr></thead><tbody>`;
+      names.forEach(k=>{
+        const d = freq[k]; const total = d.present + d.absent; const pct = total ? (d.present/total*100).toFixed(2) : '0.00';
+        html += `<tr><td>${escapeHtml(titleCase(k))}</td><td>${d.present}</td><td>${d.absent}</td><td>${pct}%</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      show(html);
+    }
+
+    function renderStudentReport(){
+      show(`<h3>Individual Student Report</h3>
+        <p class='muted'>Enter student name to view report.</p>
+        <input id='q_name' placeholder='student name' style='padding:8px;border-radius:6px;border:1px solid #e6edf3' />
+        <button id='q_do' style='margin-left:8px'>Show</button>`);
+      document.getElementById('q_do').addEventListener('click', ()=>{
+        const s = document.getElementById('q_name').value.trim().toLowerCase();
+        if(!s){ alert('Enter name'); return; }
+        const freq = calculateFrequency();
+        if(!freq[s]){ alert('No records found for '+titleCase(s)); return; }
+        const data = freq[s]; const total = data.present + data.absent; const pct = total? (data.present/total*100).toFixed(2): '0.00';
+        show(`<h3>Student Report</h3><p><strong>${titleCase(s)}</strong></p><p>Total Days: ${total}<br>Present: ${data.present}<br>Absent: ${data.absent}<br>Attendance: ${pct}%</p>`);
+      });
+    }
+
+    function renderMonthlyReport(){
+      show(`<h3>Monthly Report</h3>
+        <p class='muted'>Enter student name to see month-wise summary.</p>
+        <input id='m_name_q' placeholder='student name' style='padding:8px;border-radius:6px;border:1px solid #e6edf3' />
+        <button id='m_do_q' style='margin-left:8px'>Show</button>`);
+      document.getElementById('m_do_q').addEventListener('click', ()=>{
+        const s = document.getElementById('m_name_q').value.trim().toLowerCase(); if(!s){ alert('Enter name'); return; }
+        const monthly = {}; attendance.forEach(r=>{ if(r.name.trim().toLowerCase() !== s) return; const parts = r.date.split('-'); const month = parseInt(parts[1],10); if(!monthly[month]) monthly[month] = {present:0,absent:0}; if(r.status==='Present') monthly[month].present++; else monthly[month].absent++; });
+        if(Object.keys(monthly).length===0){ alert('No records for '+titleCase(s)); return; }
+        let html = `<h3>Monthly Report — ${titleCase(s)}</h3><table><thead><tr><th>Month</th><th>Present</th><th>Absent</th><th>Percentage</th></tr></thead><tbody>`;
+        Object.keys(monthly).sort((a,b)=>a-b).forEach(m=>{ const d = monthly[m]; const t = d.present + d.absent; const p = t? (d.present/t*100).toFixed(2): '0.00'; html += `<tr><td>${String(m).padStart(2,'0')}</td><td>${d.present}</td><td>${d.absent}</td><td>${p}%</td></tr>`; });
+        html += `</tbody></table>`; show(html);
+      });
+    }
+
+    // ---------- Utilities ----------
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function titleCase(s){ return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' '); }
+
+    // ---------- Demo data and seed ----------
+    function seedDemo(){ attendance = [ {date:formatDate(new Date()), name:'Aaryan', status:'Present'}, {date:formatDate(new Date()), name:'Rohan', status:'Absent'}, {date:formatDate(new Date()), name:'Sana', status:'Present'} ]; }
+
+    // ---------- small helpers for csv parsing correctness ----------
+    // (already defined above)
+
+    // ---------- initialize ----------
+    renderWelcome();
+
+    // expose download function for testing
+    window._attendance = attendance;
+  </script>
 </body>
 </html>
