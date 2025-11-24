@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .login-container {
+            width: 350px;
+            background: #fff;
+            margin: 100px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #999;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .code-section {
+            width: 90%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        details {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #222;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+
+    <script>
+        function login() {
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+
+            if (user === "admin" && pass === "1234") {
+                document.getElementById("login-page").classList.add("hidden");
+                document.getElementById("code-page").classList.remove("hidden");
+            } else {
+                alert("Incorrect username or password!");
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="login-container">
+        <h2>Login</h2>
+
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+
+        <button onclick="login()">Login</button>
+    </div>
+
+
+    <!-- CODE PAGE -->
+    <div id="code-page" class="code-page hidden">
+        <div class="code-section">
+            <h2>Attendance System (Python Code)</h2>
+
+            <details>
+                <summary>CONFIG</summary>
+                <pre>
+import csv
+import datetime
+import os
+
+FILE = "attendance.csv"
+USERNAME = "admin"
+PASSWORD = "1234"
+                </pre>
+            </details>
+
+            <details>
+                <summary>LOGIN SYSTEM</summary>
+                <pre>
+def login():
+    print("=========== LOGIN REQUIRED ===========")
+    for attempt in range(3):
+        user = input("Enter username: ").strip()
+        pwd = input("Enter password: ").strip()
+
+        if user == USERNAME and pwd == PASSWORD:
+            print("\nLogin successful!")
+            return True
+        else:
+            print("Incorrect username or password.\n")
+    return False
+                </pre>
+            </details>
+
+            <details>
+                <summary>FILE HANDLING</summary>
+                <pre>
+def create_file():
+    if not os.path.exists(FILE):
+        with open(FILE, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Date", "Student Name", "Status"])
+                </pre>
+            </details>
+
+            <details>
+                <summary>MARK ATTENDANCE</summary>
+                <pre>
+def mark_attendance():
+    name = input("Enter student name: ").strip()
+    status = input("Present (P) or Absent (A): ").upper().strip()
+
+    today = datetime.date.today().strftime("%d-%m-%Y")
+
+    with open(FILE, "a", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([today, name, "Present" if status == "P" else "Absent"])
+                </pre>
+            </details>
+
+            <details>
+                <summary>VIEW RAW TABLE</summary>
+                <pre>
+def view_raw_table():
+    with open(FILE, "r") as f:
+        for row in csv.reader(f):
+            print(row)
+                </pre>
+            </details>
+
+            <details>
+                <summary>ATTENDANCE FREQUENCY</summary>
+                <pre>
+def calculate_frequency():
+    freq = {}
+    with open(FILE, "r") as f:
+        reader = csv.reader(f)
+        next(reader)
+        for date, name, status in reader:
+            name_key = name.lower()
+            if name_key not in freq:
+                freq[name_key] = {"present": 0, "absent": 0}
+            freq[name_key]["present" if status == "Present" else "absent"] += 1
+    return freq
+                </pre>
+            </details>
+
+            <details>
+                <summary>REPORT GENERATION</summary>
+                <pre>
+def full_summary_report():
+    freq = calculate_frequency()
+    for name, data in freq.items():
+        total = data["present"] + data["absent"]
+        percent = (data["present"] / total * 100)
+        print(name, percent)
+                </pre>
+            </details>
+
+            <details>
+                <summary>MAIN MENU</summary>
+                <pre>
+def menu():
+    create_file()
+
+    if not login():
+        return
+
+    while True:
+        print("1. Mark Attendance")
+        print("2. View Raw Attendance Table")
+        print("3. Full Report")
+        print("4. Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1": mark_attendance()
+        elif choice == "2": view_raw_table()
+        elif choice == "3": full_summary_report()
+        elif choice == "4": break
+                </pre>
+            </details>
+
+        </div>
+    </div>
+
+</body>
+</html>
